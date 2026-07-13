@@ -3,7 +3,7 @@
  * Plugin Name: OZD WP E-Bülten
  * Plugin URI: https://www.sadikozdogan.com
  * Description: WordPress standartlarına uygun, AJAX destekli, ayarlanabilir temel e-bülten abonelik eklentisi.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Sadık Özdoğan
@@ -27,7 +27,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'OZD_EBULTEN_VERSION', '1.0.0' );
+define( 'OZD_EBULTEN_VERSION', '1.0.1' );
 define( 'OZD_EBULTEN_FILE', __FILE__ );
 define( 'OZD_EBULTEN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OZD_EBULTEN_URL', plugin_dir_url( __FILE__ ) );

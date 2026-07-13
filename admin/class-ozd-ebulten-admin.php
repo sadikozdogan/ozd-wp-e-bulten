@@ -19,6 +19,7 @@ class OZD_EBulten_Admin {
         add_action( 'admin_post_ozd_ebulten_change_status', array( $this, 'change_status' ) );
         add_action( 'admin_post_ozd_ebulten_export_csv', array( $this, 'export_csv' ) );
         add_action( 'admin_post_ozd_ebulten_resend_confirmation', array( $this, 'resend_confirmation' ) );
+        add_action( 'admin_post_ozd_ebulten_reset_settings', array( $this, 'reset_settings' ) );
         add_action( 'load-toplevel_page_ozd-ebulten', array( $this, 'handle_bulk_actions' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
     }
@@ -117,6 +118,8 @@ class OZD_EBulten_Admin {
         ?>
         <div class="wrap">
             <h1><?php esc_html_e( 'OZD E-Bülten Ayarları', 'ozd-wp-e-bulten' ); ?></h1>
+            <?php settings_errors(); ?>
+            <?php $this->settings_reset_notice(); ?>
             <p><?php esc_html_e( 'Form, onay, e-posta gönderimi ve veri saklama davranışlarını buradan yönetebilirsiniz.', 'ozd-wp-e-bulten' ); ?></p>
             <form method="post" action="options.php">
                 <?php settings_fields( 'ozd_ebulten_settings_group' ); ?>
@@ -126,8 +129,62 @@ class OZD_EBulten_Admin {
                 <?php $this->settings_section_data( $settings ); ?>
                 <?php submit_button( __( 'Ayarları Kaydet', 'ozd-wp-e-bulten' ) ); ?>
             </form>
+
+            <hr>
+
+            <h2><?php esc_html_e( 'Ayarları Sıfırla', 'ozd-wp-e-bulten' ); ?></h2>
+            <p><?php esc_html_e( 'Bu işlem yalnızca eklenti ayarlarını varsayılan değerlere döndürür. Abone kayıtları silinmez.', 'ozd-wp-e-bulten' ); ?></p>
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <?php wp_nonce_field( 'ozd_ebulten_reset_settings' ); ?>
+                <input type="hidden" name="action" value="ozd_ebulten_reset_settings">
+                <p class="submit">
+                    <button
+                        type="submit"
+                        class="button button-secondary"
+                        onclick="return confirm('<?php echo esc_js( __( 'Tüm eklenti ayarları varsayılan değerlere döndürülecek. Devam etmek istiyor musunuz?', 'ozd-wp-e-bulten' ) ); ?>');"
+                    >
+                        <?php esc_html_e( 'Ayarları Varsayılana Döndür', 'ozd-wp-e-bulten' ); ?>
+                    </button>
+                </p>
+            </form>
         </div>
         <?php
+    }
+
+    /**
+     * Displays the settings reset notice.
+     */
+    private function settings_reset_notice() {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag after a verified redirect.
+        if ( empty( $_GET['ozd_settings_reset'] ) ) {
+            return;
+        }
+
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Eklenti ayarları varsayılan değerlere döndürüldü.', 'ozd-wp-e-bulten' ) . '</p></div>';
+    }
+
+    /**
+     * Resets plugin settings to their defaults.
+     */
+    public function reset_settings() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'Bu işlem için yetkiniz yok.', 'ozd-wp-e-bulten' ) );
+        }
+
+        check_admin_referer( 'ozd_ebulten_reset_settings' );
+
+        update_option( OZD_EBULTEN_OPTION, OZD_EBulten_Activator::default_settings() );
+
+        wp_safe_redirect(
+            add_query_arg(
+                array(
+                    'page'               => 'ozd-ebulten-settings',
+                    'ozd_settings_reset' => '1',
+                ),
+                admin_url( 'admin.php' )
+            )
+        );
+        exit;
     }
 
     /**

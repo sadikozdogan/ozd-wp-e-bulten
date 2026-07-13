@@ -4,7 +4,7 @@ Tags: newsletter, email subscription, ajax, subscribers, e-bulten
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,11 @@ Başlıca action hookları:
 * `ozd_ebulten_after_admin_delete_subscriber`
 
 == Changelog ==
+
+= 1.0.1 =
+* Onay bekleyen abonelerde yeniden gönderilen e-postanın sonucu kontrol edilir hale getirildi.
+* Ayarlar kaydedildi yönetim bildirimi görünür hale getirildi.
+* Abone kayıtlarını silmeden eklenti ayarlarını varsayılan değerlere döndüren güvenli sıfırlama özelliği eklendi.
 
 = 1.0.0 =
 * İlk kararlı sürüm.

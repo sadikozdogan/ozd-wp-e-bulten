@@ -197,7 +197,32 @@ class OZD_EBulten_Public {
         }
 
         if ( $exists && 'pending' === $exists->status && OZD_EBulten_Helpers::bool( $settings['enable_double_optin'] ) ) {
-            $this->send_confirmation_email( $exists );
+            $sent = $this->send_confirmation_email( $exists );
+
+            if ( ! $sent ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Store mail sending failure.
+                $wpdb->update(
+                    $table,
+                    array(
+                        'last_error' => __( 'Onay e-postası tekrar gönderilemedi.', 'ozd-wp-e-bulten' ),
+                        'updated_at' => $now,
+                    ),
+                    array( 'id' => (int) $exists->id )
+                );
+
+                return $this->fail( __( 'Onay e-postası gönderilemedi. Lütfen site yöneticisiyle iletişime geçin.', 'ozd-wp-e-bulten' ) );
+            }
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Clear previous mail sending failure after a successful resend.
+            $wpdb->update(
+                $table,
+                array(
+                    'last_error' => null,
+                    'updated_at' => $now,
+                ),
+                array( 'id' => (int) $exists->id )
+            );
+
             return array( 'ok' => true, 'step' => 'done', 'message' => $settings['pending_already_message'] );
         }
 
