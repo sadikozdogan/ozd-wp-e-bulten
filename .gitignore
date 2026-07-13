@@ -1,0 +1,32 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs, caches and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.old
+.phpunit.result.cache
+.phpcs.cache
+
+# Local dependencies and build output
+node_modules/
+vendor/
+build/
+dist/
+
+# Local release archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z

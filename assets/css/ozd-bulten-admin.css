@@ -1,0 +1,35 @@
+.ozd-admin-filter,
+.ozd-admin-export {
+    margin: 12px 0;
+}
+
+.ozd-admin-inline-form {
+    display: inline-block;
+    margin: 0 4px 4px 0;
+}
+
+.ozd-admin-delete-form {
+    margin-top: 4px;
+}
+
+.ozd-admin-error-text {
+    color: #b32d2e;
+}
+
+.ozd-admin-stats {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+
+.ozd-admin-stat-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 12px 16px;
+    min-width: 140px;
+}
+
+.ozd-admin-stat-card span {
+    font-size: 24px;
+}
